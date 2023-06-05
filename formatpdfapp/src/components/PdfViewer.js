@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 const PdfViewer = () => {
   const [pdfUrl, setPdfUrl] = useState('');
+  const [uploadStatus, setUploadStatus] = useState('');
 
   const handlePdfUpload = (event) => {
     const file = event.target.files[0];
