@@ -9,6 +9,10 @@ I've used mongoDB as the database for this program.
 ```
 git clone git@github.com:bynned/Upload-and-Share-PDF.git
 ```
+> install dependencies in /formatpdfbackend and /formatpdfapp directories
+```
+npm install
+```
 > Create a .env file in the /formatpdfbackend directory with the following information:
 ```
 DB_URL="YOUR DATABASE URL"
