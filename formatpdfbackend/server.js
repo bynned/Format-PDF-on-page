@@ -4,8 +4,9 @@ const mongoose = require('mongoose');
 const multer = require('multer');
 const cors = require('cors');
 const app = express();
+const path = require('path');
 
-const port = 6000; // Port where server is running
+const port = 5050; // Port where server is running
 app.use(cors());
 
 // Connect to database
@@ -26,20 +27,20 @@ const Pdf = mongoose.model('Pdf', pdfSchema);
 // Setup file upload using Multer:
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        cb(null, 'uploads/');
+      cb(null, path.join(__dirname, 'uploads/'));
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname);
+      cb(null, file.originalname);
     },
-});
+  });
 const upload = multer({ storage });
 
 // Define post and get routes for uploading and getting the stored pdf's
 app.post('/upload', upload.single('pdf'), (req, res) => {
     const { filename } = req.file;
-    const newPdf = newPdf({ filename });
+    const newPdf = new Pdf({ filename });
     newPdf.save()
-        .then(() => res.json({ success: true }))
+        .then(() => res.redirect(`/pdfs/${newPdf._id}`))
         .catch((error) => res.status(500).json({ error }));
 });
 
@@ -47,13 +48,24 @@ app.get('/pdfs/:id', (req, res) => {
     const { id } = req.params;
     Pdf.findById(id)
         .then((pdf) => {
-            if(!pdf) {
-                return res.status(404).json({error: 'PDF doesnt exist' });
+            if (!pdf) {
+                return res.status(404).json({ error: 'PDF does not exist' });
             }
-            res.sendFile(`${__dirname}/uploads/${pdf.filename}`);
+            res.sendFile(path.join(__dirname, `uploads/${pdf.filename}`));
         })
         .catch((error) => res.status(500).json({ error }));
 });
+app.get('/pdf-url', (req, res) => {
+    Pdf.findOne()
+      .then((pdf) => {
+        if (!pdf) {
+          return res.status(404).json({ error: 'No PDF available' });
+        }
+        const pdfUrl = `${req.protocol}://${req.get('host')}/pdfs/${pdf._id}`;
+        res.json({ url: pdfUrl });
+      })
+      .catch((error) => res.status(500).json({ error }));
+  });
 app.listen(port, () =>{
     console.log(`Server running on port ${port}`);
 })
