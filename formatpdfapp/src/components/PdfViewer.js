@@ -22,7 +22,7 @@ const PdfViewer = () => {
   };
 
   const getPdfUrl = () => {
-    axios.get('http://localhost:5050/pdf-url')
+    axios.get('http://localhost:5050/pdfs')
       .then((response) => {
         setPdfUrl(response.data.url);
       })
@@ -32,9 +32,16 @@ const PdfViewer = () => {
       });
   };
 
+  const handleSharePdfLink = () => {
+    if (pdfUrl) {
+      alert(`Share this PDF link: ${pdfUrl}`);
+    }
+  };
+
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <input type="file" accept="application/pdf" onChange={handlePdfUpload} />
+      <button onClick={handleSharePdfLink}>Share PDF Link</button>
       {uploadStatus && <p>{uploadStatus}</p>}
       {pdfUrl ? (
         <iframe

@@ -55,7 +55,7 @@ app.get('/pdfs/:id', (req, res) => {
         })
         .catch((error) => res.status(500).json({ error }));
 });
-app.get('/pdf-url', (req, res) => {
+app.get('/pdfs', (req, res) => {
     Pdf.findOne()
       .then((pdf) => {
         if (!pdf) {
