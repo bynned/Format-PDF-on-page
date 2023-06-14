@@ -41,7 +41,7 @@ const PdfViewer = () => {
   return (
     <div style={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
       <input type="file" accept="application/pdf" onChange={handlePdfUpload} />
-      <button onClick={handleSharePdfLink}>Share PDF Link</button>
+      <button className='shareButton' onClick={handleSharePdfLink}>Share PDF Link</button>
       {uploadStatus && <p>{uploadStatus}</p>}
       {pdfUrl ? (
         <iframe
