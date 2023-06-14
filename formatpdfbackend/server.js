@@ -66,6 +66,7 @@ app.get('/pdfs', (req, res) => {
       })
       .catch((error) => res.status(500).json({ error }));
   });
+  
 app.listen(port, () =>{
     console.log(`Server running on port ${port}`);
 })
